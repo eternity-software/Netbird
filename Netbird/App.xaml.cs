@@ -27,6 +27,7 @@ namespace Netbird
             settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream", "use-fake-ui-for-media-stream");
             settings.CefCommandLineArgs.Add("enable-gpu", "1");
             settings.CefCommandLineArgs.Add("enable-webgl", "1");
+            
             settings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
 
 

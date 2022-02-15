@@ -3,9 +3,11 @@ using CefSharp.Wpf;
 using Netbird.browser.handlers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Netbird.browser
 {
@@ -18,11 +20,18 @@ namespace Netbird.browser
         {
             BrowserSettings.WindowlessFrameRate = 60;
             updateController(tabController);
+           
+           
+
             LoadingStateChanged += (sender, args) =>
             {
                 //Wait for the Page to finish loading
-                if (args.IsLoading == false)
+                if (args.IsLoading == true)
                 {
+                    tabController.window.Dispatcher.Invoke(() => {
+                        loadExtention();
+                    });
+                  
                     BrowserCore.ExecuteScriptAsync("(function () {\n" +
          "  \n" +
          "// Scroll Variables (tweakable)\n" +
@@ -817,6 +826,119 @@ namespace Netbird.browser
         private void NetbirdChromium_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
           
+        }
+
+        public void loadExtention()
+        {
+            var browser = WebBrowser;
+            //The sample extension only works for http(s) schemes
+            if (browser.Address.StartsWith("http"))
+            {
+                var requestContext = browser.GetBrowserHost().RequestContext;
+
+                var dir = Path.Combine(AppContext.BaseDirectory, @"..\..\..\Extensions");
+                dir = Path.GetFullPath(dir);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                    throw new DirectoryNotFoundException("Unable to locate extensions folder - " + dir);
+                }
+
+                var extensionHandler = new ExtensionHandler
+                {
+                    LoadExtensionPopup = (url) =>
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            var extensionWindow = new Window();
+
+                            var extensionBrowser = new ChromiumWebBrowser(url);
+                            //extensionBrowser.IsBrowserInitializedChanged += (s, args) =>
+                            //{
+                            //    extensionBrowser.ShowDevTools();
+                            //};
+
+                            extensionWindow.Content = extensionBrowser;
+
+                            extensionWindow.Show();
+                        }));
+                    },
+                    GetActiveBrowser = (extension, isIncognito) =>
+                    {
+                        //Return the active browser for which the extension will act upon
+                        return browser.BrowserCore;
+                    }
+                };
+
+                requestContext.LoadExtensionsFromDirectory(dir, extensionHandler);
+                
+            }
+            else
+            {
+                MessageBox.Show("The sample extension only works with http(s) schemes, please load a different website and try again", "Unable to load Extension");
+            }
+        }
+
+        public class ExtensionHandler : IExtensionHandler
+        {
+            public Func<IExtension, bool, IBrowser> GetActiveBrowser;
+            public Action<string> LoadExtensionPopup;
+
+            public void Dispose()
+            {
+                GetActiveBrowser = null;
+                LoadExtensionPopup = null;
+            }
+
+            bool IExtensionHandler.CanAccessBrowser(IExtension extension, IBrowser browser, bool includeIncognito, IBrowser targetBrowser)
+            {
+                return false;
+            }
+
+            IBrowser IExtensionHandler.GetActiveBrowser(IExtension extension, IBrowser browser, bool includeIncognito)
+            {
+                return GetActiveBrowser?.Invoke(extension, includeIncognito);
+                return null;
+            }
+
+            bool IExtensionHandler.GetExtensionResource(IExtension extension, IBrowser browser, string file, IGetExtensionResourceCallback callback)
+            {
+                return false;
+            }
+
+            bool IExtensionHandler.OnBeforeBackgroundBrowser(IExtension extension, string url, IBrowserSettings settings)
+            {
+                return false;
+            }
+
+            bool IExtensionHandler.OnBeforeBrowser(IExtension extension, IBrowser browser, IBrowser activeBrowser, int index, string url, bool active, IWindowInfo windowInfo, IBrowserSettings settings)
+            {
+                return false;
+            }
+
+            void IExtensionHandler.OnExtensionLoaded(IExtension extension)
+            {
+                var manifest = extension.Manifest;
+                var browserAction = manifest["browser_action"].GetDictionary();
+                if (browserAction.ContainsKey("default_popup"))
+                {
+                    var popupUrl = browserAction["default_popup"].GetString();
+
+                    popupUrl = "chrome-extension://" + extension.Identifier + "/" + popupUrl;
+
+                    LoadExtensionPopup?.Invoke(popupUrl);
+                }
+            }
+
+            void IExtensionHandler.OnExtensionLoadFailed(CefErrorCode errorCode)
+            {
+
+            }
+
+            void IExtensionHandler.OnExtensionUnloaded(IExtension extension)
+            {
+
+            }
         }
 
         public void OnLoadError(object chromiumWebBrowser, LoadErrorEventArgs loadErrorArgs)
