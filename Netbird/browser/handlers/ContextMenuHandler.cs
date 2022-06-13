@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -30,9 +28,9 @@ namespace Netbird.browser.handlers
                 model.AddSeparator();
             }
 
-           
-            
-            if(parameters.LinkUrl.Length > 2)
+
+
+            if (parameters.LinkUrl.Length > 2)
             {
                 foundedUrl = parameters.LinkUrl;
                 model.AddItem((CefMenuCommand)26503, "Open in new tab");
@@ -96,8 +94,6 @@ namespace Netbird.browser.handlers
                 {
                     menu.Closed -= handler;
 
-                    //If the callback has been disposed then it's already been executed
-                    //so don't call Cancel
                     if (!callback.IsDisposed)
                     {
                         callback.Cancel();
@@ -185,7 +181,7 @@ namespace Netbird.browser.handlers
                                     }
                                 case CefMenuCommand.Find:
                                     {
-                                        browser.GetHost().Find(0, parameters.SelectionText, true, false, false);
+                                       // browser.GetHost().Find(0, parameters.SelectionText, true, false, false);
                                         break;
                                     }
                                 case CefMenuCommand.AddToDictionary:

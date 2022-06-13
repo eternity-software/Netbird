@@ -1,11 +1,8 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -81,11 +78,12 @@ namespace Netbird.browser.handlers
                 //context menus, etc. If parentHandle is not provided then the main screen monitor will be used and some
                 //functionality that requires a parent window may not function correctly.
                 windowInfo.SetAsWindowless(handle);
-                tabController.addTab((NetbirdChromium) popupChromiumWebBrowser);
+
+                tabController.addTab((NetbirdChromium)popupChromiumWebBrowser, tabController.getIndex(tabController.selectedTab));
 
                 popup.Closed += (o, e) =>
                 {
-                   
+
                 };
             });
 

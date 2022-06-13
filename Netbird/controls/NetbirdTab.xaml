@@ -8,9 +8,26 @@
              Name="netbirdItem"
          
           Style="{DynamicResource TabItemStyle}" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" SizeChanged="netbirdItem_SizeChanged" MouseEnter="netbirdItem_MouseEnter" MouseLeave="netbirdItem_MouseLeave">
 
- 
+    <TabItem.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard TargetProperty="Width" >
+                    <DoubleAnimation From="0" To="150"
+                                 AutoReverse="False"
+                                  DecelerationRatio="0.5"
+                             Duration="0:0:0:0.3"
+                                   
+                                     FillBehavior="Stop"
+                                     Completed="Animation_Completed"
+                                     
+    />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+       
+    </TabItem.Triggers>
     <TabItem.Resources>
         <Style x:Key="TabItemStyle" TargetType="TabItem">
             <Setter Property="Background" Value="Transparent"/>
@@ -43,31 +60,54 @@
                                               Margin="{TemplateBinding Padding}">
 
                               
-                                <Image RenderOptions.BitmapScalingMode="HighQuality"  Width="20" VerticalAlignment="Center" Height="30" Source="{Binding Favicon, ElementName=netbirdItem}"  Margin="0 0 10 0"></Image>
+                                <Image RenderOptions.BitmapScalingMode="HighQuality"  Width="20" VerticalAlignment="Center" Height="30" Source="{Binding Favicon, ElementName=netbirdItem}"  Margin="0 0 10 0" Loaded="btnClose_Loaded"></Image>
                                 <ContentPresenter HorizontalAlignment="Left"
                                               VerticalAlignment="Center"
                                                  RecognizesAccessKey="True"
                                               ContentSource="Header"
+                                              Width="70"
                                               Focusable="False"/>
                              
                             </StackPanel>
-                            <Image HorizontalAlignment="Right" Source="{Binding ActionButton, ElementName=netbirdItem}"  PreviewMouseUp="Button_Click"  MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Width="20" Height="20"  Margin="0 0 10 0"/>
+                            <Image HorizontalAlignment="Right" Source="{Binding ActionButton, ElementName=netbirdItem}"  PreviewMouseUp="Button_Click"  MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Width="20" Height="20"  Margin="0 0 10 0" Loaded="Image_Loaded"/>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background"
-                                        Value="#F6F6F6"/>
-                                
+                            
                                
-                            </Trigger>
+                               
+                           
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="BorderThickness"
                                         Value="0"/>
+                                
                                 <Setter Property="Background"
                                         Value="#F4F4F4"/>
                                 <Setter Property="Foreground"
                                         Value="#454545"/>
                             </Trigger>
+
+                            <EventTrigger RoutedEvent="local:NetbirdTab.ConditionalMouseEnter"  >
+
+                                <BeginStoryboard>
+
+                                    <Storyboard >
+                                        <ColorAnimation To="#F6F6F6"
+                                   Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd"
+                                    Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="local:NetbirdTab.ConditionalMouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="Background">
+                                        <ColorAnimation To="#FFFFFF"
+                                  Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd"
+                                    Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

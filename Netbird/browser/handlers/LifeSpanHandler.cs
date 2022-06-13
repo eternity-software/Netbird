@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using CefSharp;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CefSharp;
 
 namespace Netbird.browser.handlers
 {
@@ -29,13 +24,15 @@ namespace Netbird.browser.handlers
 
         public void OnBeforeClose(IWebBrowser chromiumWebBrowser, IBrowser browser)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public bool OnBeforePopup(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, string targetUrl, string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures, IWindowInfo windowInfo, IBrowserSettings browserSettings, ref bool noJavascriptAccess, out IWebBrowser newBrowser)
         {
 
-            tabController.addTab(targetUrl);
+            tabController.addTab(targetUrl, tabController.getIndex(tabController.selectedTab));
+
+
 
             newBrowser = null;
             return true;

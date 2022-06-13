@@ -1,25 +1,15 @@
 ﻿using CefSharp;
-using CefSharp.Wpf;
 using Netbird.browser;
 using Netbird.browser.handlers;
 using Netbird.controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Netbird
 {
@@ -30,51 +20,54 @@ namespace Netbird
     {
 
         public TabController tabController;
-        private NetbirdChromium selectedNetbirdChromium;
+        private NetbirdChromium selectedNetbirdChromium = null;
         private bool isEditingUrl = false;
+        private bool isCtrlPressed = false;
 
         public MainWindow()
         {
-          
-           
+
+
 
             InitializeComponent();
             this.DpiChanged += MainWindow_DpiChanged;
             tabController = new TabController(tabControl, this, tabsPresenter);
             tabController.controllerCallback = this;
             tabControl.SelectionChanged += tabControl_SelectionChanged;
-           // tabController.addTab("https://yandex.ru/");
+            // tabController.addTab("https://yandex.ru/");
+
+
         }
 
-        
+
         private void MainWindow_DpiChanged(object sender, DpiChangedEventArgs e)
         {
             Debug.WriteLine("DPI changed");
             try
             {
-               if(e.OldDpi.PixelsPerDip != e.NewDpi.PixelsPerDip)
+                if (e.OldDpi.PixelsPerDip != e.NewDpi.PixelsPerDip)
                 {
 
 
                     MessageBox.Show("It seems that DPI has been changed. Netbird currently not supporting dynamic DPI. ", "Netbird Warning");
                 }
-               
+
             }
             catch
             {
-                
+
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            tabController.addTab("https://yandex.ru/");
-      
+            tabController.AddTab(null, "Main");
+
         }
 
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-        
+
             Title = tabController.GetTabTitle(tabControl.SelectedIndex);
             updateChromiumInfo();
 
@@ -87,7 +80,7 @@ namespace Netbird
 
         private void ScrollViewer_MouseLeave(object sender, MouseEventArgs e)
         {
-            if(tabController.draggingControl != null && tabController.GetTabCount() > 2)
+            if (tabController.draggingControl != null && tabController.GetTabCount() > 2)
             {
                 tabController.openNewWindow(tabController.draggingControl);
                 tabController.draggingControl = null;
@@ -99,14 +92,14 @@ namespace Netbird
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if ((tabController.currentlyTabHovering && tabsPresenter.Children.Count > 1) | currentlyAddHovering) return;
-           
-            if(e.LeftButton == MouseButtonState.Pressed)
+
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 hookAllowed = true;
                 this.DragMove();
             }
-           
-           
+
+
         }
 
         [DllImport("user32.dll")]
@@ -131,7 +124,7 @@ namespace Netbird
             HookWindowMinimize(sender, e);
         }
 
-        
+
 
         public void HookWindowMinimize(object sender, MouseEventArgs e)
         {
@@ -177,24 +170,24 @@ namespace Netbird
 
         }
 
-      
+
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
-           if(WindowState == WindowState.Maximized)
+            if (WindowState == WindowState.Maximized)
             {
                 WindowStyle = WindowStyle.SingleBorderWindow;
                 WindowState = WindowState.Maximized;
                 WindowStyle = WindowStyle.None;
                 hookAllowed = false;
             }
-          
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowStyle = WindowStyle.None;
-           
+
         }
 
         private void tabsPresenter_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -204,7 +197,7 @@ namespace Netbird
 
         public void OnTitleUpdate(NetbirdTab tab, string title)
         {
-            if(tabController.getIndex(tab) == tabControl.SelectedIndex)
+            if (tabController.getIndex(tab) == tabControl.SelectedIndex)
             {
                 Title = title;
             }
@@ -212,7 +205,7 @@ namespace Netbird
 
         private void Button_Click(object sender, MouseButtonEventArgs e)
         {
-            tabController.addTab("https://yandex.ru/");
+            tabController.AddTab(null, "Main");
         }
 
         private bool currentlyAddHovering = false;
@@ -320,7 +313,7 @@ namespace Netbird
 
         private void Image_MouseEnter_4(object sender, MouseEventArgs e)
         {
-            if((sender as Image).IsEnabled)
+            if ((sender as Image).IsEnabled)
             {
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
@@ -330,13 +323,13 @@ namespace Netbird
             }
             else
             {
-               
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(@"/Netbird;component/Resources/back_disabled.png", UriKind.Relative);
-                    image.EndInit();
-                    (sender as Image).Source = image;
-                
+
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(@"/Netbird;component/Resources/back_disabled.png", UriKind.Relative);
+                image.EndInit();
+                (sender as Image).Source = image;
+
             }
         }
 
@@ -352,13 +345,13 @@ namespace Netbird
             }
             else
             {
-               
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(@"/Netbird;component/Resources/back_disabled.png", UriKind.Relative);
-                    image.EndInit();
-                    (sender as Image).Source = image;
-                
+
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(@"/Netbird;component/Resources/back_disabled.png", UriKind.Relative);
+                image.EndInit();
+                (sender as Image).Source = image;
+
             }
         }
 
@@ -374,13 +367,13 @@ namespace Netbird
             }
             else
             {
-              
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(@"/Netbird;component/Resources/forward_disabled.png", UriKind.Relative);
-                    image.EndInit();
-                    (sender as Image).Source = image;
-                
+
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(@"/Netbird;component/Resources/forward_disabled.png", UriKind.Relative);
+                image.EndInit();
+                (sender as Image).Source = image;
+
             }
         }
 
@@ -396,17 +389,17 @@ namespace Netbird
             }
             else
             {
-              
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(@"/Netbird;component/Resources/forward_disabled.png", UriKind.Relative);
-                    image.EndInit();
-                    (sender as Image).Source = image;
-                
+
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(@"/Netbird;component/Resources/forward_disabled.png", UriKind.Relative);
+                image.EndInit();
+                (sender as Image).Source = image;
+
             }
         }
 
-      
+
 
 
 
@@ -415,18 +408,25 @@ namespace Netbird
          * This method invokes on every layout update!
          * Be careful of unsafe UI change
          */
+        private long milliseconds = 0;
+       
         private void updateChromiumInfo()
         {
-            if(tabControl.SelectedItem == null)
+          
+            long curr  = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (curr - 10 < milliseconds) return;
+            
+            milliseconds = curr;
+            if (tabControl.SelectedItem == null)
             {
                 return;
             }
             if ((tabControl.SelectedItem as TabItem).Content is NetbirdChromium)
             {
                 NetbirdChromium netbirdChromium = (NetbirdChromium)(tabControl.SelectedItem as TabItem).Content;
-                if(selectedNetbirdChromium != netbirdChromium)
+                if (selectedNetbirdChromium != netbirdChromium)
                 {
-                    if(selectedNetbirdChromium != null)
+                    if (selectedNetbirdChromium != null)
                     {
 
                         selectedNetbirdChromium.LayoutUpdated -= NetbirdChromium_LayoutUpdated;
@@ -435,14 +435,19 @@ namespace Netbird
 
                     netbirdChromium.LayoutUpdated += NetbirdChromium_LayoutUpdated;
                     selectedNetbirdChromium = netbirdChromium;
-                   
+
                 }
 
                 String adress = netbirdChromium.Address;
                 if (adress != null)
                 {
-                    Uri myUri = new Uri(adress);
-                    String domain = myUri.Host;
+                    String domain = "Main";
+                    if (adress.StartsWith("http"))
+                    {
+                        Uri myUri = new Uri(adress);
+                         domain = myUri.Host;
+                    }
+                  
 
                     if (!isEditingUrl)
                     {
@@ -463,7 +468,7 @@ namespace Netbird
                 }
 
 
-                    if (HeaderBar.Content == null)
+                if (HeaderBar.Content == null)
                 {
                     HeaderBar.Content = netbirdChromium.Title;
                 }
@@ -475,6 +480,26 @@ namespace Netbird
                     }
                 }
                
+                if (netbirdChromium.IsLoading)
+                {
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(@"/Netbird;component/Resources/stop_icon.png", UriKind.Relative);
+                    image.EndInit();
+
+
+
+                    reloadBtn.Source = image;
+                }
+                else
+                {
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(@"/Netbird;component/Resources/refresh.png", UriKind.Relative);
+                    image.EndInit();
+                    reloadBtn.Source = image;
+
+                }
 
                 if (netbirdChromium.CanGoBack)
                 {
@@ -535,13 +560,13 @@ namespace Netbird
 
         private void Image_MouseLeftButtonUp_3(object sender, MouseButtonEventArgs e)
         {
-            if((tabControl.SelectedItem as TabItem).Content is NetbirdChromium)
+            if ((tabControl.SelectedItem as TabItem).Content is NetbirdChromium)
             {
                 NetbirdChromium netbirdChromium = (NetbirdChromium)(tabControl.SelectedItem as TabItem).Content;
-                if(netbirdChromium.CanGoBack)
+                if (netbirdChromium.CanGoBack)
                 {
                     netbirdChromium.Back();
-                  
+
                 }
             }
         }
@@ -554,42 +579,51 @@ namespace Netbird
                 if (netbirdChromium.CanGoForward)
                 {
                     netbirdChromium.Forward();
-                  
+
                 }
             }
         }
 
         private void BackButton1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if(selectedNetbirdChromium != null)
+            try
             {
-                selectedNetbirdChromium.Reload();
+                if (selectedNetbirdChromium != null)
+                {
+                    selectedNetbirdChromium.Reload();
+                }
             }
+            catch { }
+           
         }
 
         private void BackButton1_MouseEnter(object sender, MouseEventArgs e)
         {
+            if (selectedNetbirdChromium == null) return;
+            if (selectedNetbirdChromium.IsLoading) return;
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(@"/Netbird;component/Resources/refresh_hovered.png", UriKind.Relative);
             image.EndInit();
             (sender as Image).Source = image;
-            
+
         }
 
         private void BackButton1_MouseLeave(object sender, MouseEventArgs e)
         {
+            if (selectedNetbirdChromium == null) return;
+            if (selectedNetbirdChromium.IsLoading) return;
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(@"/Netbird;component/Resources/refresh.png", UriKind.Relative);
             image.EndInit();
             (sender as Image).Source = image;
-          
+
         }
 
         private void Border_MouseEnter(object sender, MouseEventArgs e)
         {
-           
+
             (sender as Border).Background = (Brush)new BrushConverter().ConvertFromString("#DCDCDC");
         }
 
@@ -600,7 +634,7 @@ namespace Netbird
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if(selectedNetbirdChromium != null)
+            if (selectedNetbirdChromium != null)
             {
                 selectedNetbirdChromium.Address = "https://" + Domain.Content.ToString();
             }
@@ -608,14 +642,14 @@ namespace Netbird
 
         private void HeaderBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-          
+
             UrlBar.Visibility = Visibility.Visible;
             InfoBar.Visibility = Visibility.Collapsed;
             InfoBar.IsEnabled = false;
-            
-         
+
+
             isEditingUrl = true;
-         
+
             UrlBox.SelectAll();
 
         }
@@ -656,10 +690,79 @@ namespace Netbird
 
             // your event handler here
             e.Handled = true;
-            if(selectedNetbirdChromium != null)
+            if (selectedNetbirdChromium != null)
             {
                 selectedNetbirdChromium.Address = UrlBox.Text;
             }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+
+                if (tabController.isFullscreen)
+                {
+
+
+                    // selectedNetbirdChromium.ExecuteScriptAsync("document.getElementsByTagName('video')[0].webkitExitFullScreen()");
+                }
+                if (tabController.isFullscreen)
+                {
+                    try
+                    {
+                        selectedNetbirdChromium.ExecuteScriptAsync("document.webkitExitFullscreen()");
+                    }
+                    catch { }
+
+                    tabController.RequestFullscreen(false);
+                }
+
+            }
+            else if (e.Key == Key.F11)
+            {
+
+
+                tabController.RequestFullscreen(!tabController.isFullscreen);
+            }
+            else if (e.Key == Key.LeftCtrl ||
+                e.Key == Key.RightCtrl)
+            {
+               
+                isCtrlPressed = true;
+            }
+            else if (e.Key == Key.W)
+            {
+                if (isCtrlPressed)
+                {
+                    if (tabControl.Items.Count > 0)
+                    {
+                        tabController.CloseTab(tabController.selectedTab);
+                    }
+
+                }
+            }
+        }
+
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl ||
+                e.Key == Key.RightCtrl)
+            {
+
+                isCtrlPressed = false;
+            }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            tabController.UpdateTabs();
+        }
+
+        private void ScrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            hookAllowed = false;
+         
         }
     }
 }

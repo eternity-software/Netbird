@@ -2,11 +2,7 @@
 using CefSharp.Wpf;
 using Netbird.browser.handlers;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Netbird.browser
@@ -18,21 +14,42 @@ namespace Netbird.browser
 
         public NetbirdChromium(TabController tabController)
         {
-            BrowserSettings.WindowlessFrameRate = 60;
+            BrowserSettings.WindowlessFrameRate = 120;
+            
             updateController(tabController);
-           
-           
+            
+
+      
 
             LoadingStateChanged += (sender, args) =>
             {
+                BrowserCore.ExecuteScriptAsync(smoothScroll);
                 //Wait for the Page to finish loading
                 if (args.IsLoading == true)
                 {
-                    tabController.window.Dispatcher.Invoke(() => {
-                        loadExtention();
+                    if (tabController == null) return;
+                    tabController.window.Dispatcher.Invoke(() =>
+                    {
+                        try
+                        {
+                       
+                          //  loadExtention();
+                        }
+                        catch { }
                     });
-                  
-                    BrowserCore.ExecuteScriptAsync("(function () {\n" +
+
+
+
+
+
+                }
+            };
+
+
+        }
+
+        
+        String smoothScroll = "(function () {\n" +
          "  \n" +
          "// Scroll Variables (tweakable)\n" +
          "var defaultOptions = {\n" +
@@ -57,7 +74,7 @@ namespace Netbird.browser
          "    arrowScroll       : 50,    // [px]\n" +
          "\n" +
          "    // Other\n" +
-         "    fixedBackground   : true, \n" +
+         "    fixedBackground   : false, \n" +
          "    excluded          : ''    \n" +
          "};\n" +
          "\n" +
@@ -806,15 +823,10 @@ namespace Netbird.browser
          "else\n" +
          "    window.SmoothScroll = SmoothScroll;\n" +
          "\n" +
-         "})();");
-                }
-            };
-
-
-        }
-
+         "})();";
         public void updateController(TabController tabController)
         {
+            if (tabController == null) return;
             this.tabController = tabController;
             LifeSpanHandler = new ExperimentalLifespanHandler(tabController);
             MenuHandler = new ContextMenuHandler(tabController);
@@ -825,11 +837,12 @@ namespace Netbird.browser
 
         private void NetbirdChromium_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-          
+
         }
 
         public void loadExtention()
         {
+
             var browser = WebBrowser;
             //The sample extension only works for http(s) schemes
             if (browser.Address.StartsWith("http"))
@@ -846,6 +859,8 @@ namespace Netbird.browser
 
                 var extensionHandler = new ExtensionHandler
                 {
+
+
                     LoadExtensionPopup = (url) =>
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
@@ -870,12 +885,14 @@ namespace Netbird.browser
                     }
                 };
 
+
+
                 requestContext.LoadExtensionsFromDirectory(dir, extensionHandler);
-                
+
             }
             else
             {
-                MessageBox.Show("The sample extension only works with http(s) schemes, please load a different website and try again", "Unable to load Extension");
+                //MessageBox.Show("The sample extension only works with http(s) schemes, please load a different website and try again", "Unable to load Extension");
             }
         }
 
@@ -947,8 +964,12 @@ namespace Netbird.browser
 
             if (code == "Aborted") return;
             if (code == "BlockedByResponse") return;
+            if (code == "EmptyResponse") return;
+            if (code == "ConnectionReset") return;
+            if (code == "QuicProtocolError") return;
             ((ChromiumWebBrowser) chromiumWebBrowser).GetMainFrame().LoadHtml("Netbird Error: " + loadErrorArgs.ErrorText + " #" + loadErrorArgs.ErrorCode);
             // throw new NotImplementedException();
+
         }
 
     }
