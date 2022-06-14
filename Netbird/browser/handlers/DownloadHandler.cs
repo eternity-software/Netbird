@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,14 @@ namespace Netbird.browser.handlers
 {
     public class DownloadHandler : IDownloadHandler
     {
+
+        private TabController tabController;
+
+        public DownloadHandler(TabController tabController)
+        {
+            this.tabController = tabController;
+        }
+
         bool IDownloadHandler.CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod)
         {
             return true;
@@ -19,15 +28,26 @@ namespace Netbird.browser.handlers
 
         void IDownloadHandler.OnBeforeDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback)
         {
+            tabController.controllerCallback.OnFileDownloadBegins(downloadItem);
             callback.Continue(App.downloadsFolder + "/" + downloadItem.SuggestedFileName, false);
         }
 
         void IDownloadHandler.OnDownloadUpdated(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback)
         {
-           if(downloadItem.IsComplete)
+            callback.Resume();
+           
+            try
             {
-                MessageBox.Show("File " + downloadItem.SuggestedFileName + " downloaded.", "Netbird Downloader");
+                tabController.controllerCallback.OnFileDownloadUpdate(downloadItem);
             }
+            catch(Exception e)
+            {
+                MessageBox.Show("errro!");
+                Debug.Write(e.ToString());
+
+            }
+           
+         
         }
     }
 }

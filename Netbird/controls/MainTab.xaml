@@ -8,7 +8,7 @@
              mc:Ignorable="d" Loaded="UserControl_Loaded">
 
     <ScrollViewer>
-        
+
         <Grid ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <Border BorderThickness="1"  CornerRadius="20,20,0,0" ClipToBounds="True">
                 <Border.Background>
@@ -23,9 +23,9 @@
                             <Button Content="YouTube" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_2" Width="100" Height="100" Background="White" Foreground="#FF505050" BorderBrush="White" FontSize="22" Margin="260,0,0,0"/>
                         </Grid>
                         <Border BorderThickness="1" Background="White" CornerRadius="10,10,10,10" Margin="12,330,0,0" HorizontalAlignment="Center" Height="50" Width="500" MouseDown="Border_MouseDown" VerticalAlignment="Top">
-                            <TextBox MaxLines="1"  BorderThickness="0"  x:Name="searchBox" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FF313131" FontSize="18" PreviewKeyDown="searchBox_PreviewKeyDown" BorderBrush="{x:Null}" SelectionBrush="#FFABABAB" Height="19"/>
+                            <TextBox MaxLines="1"  BorderThickness="0"  x:Name="searchBox" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FF313131" FontSize="18" PreviewKeyDown="searchBox_PreviewKeyDown" BorderBrush="{x:Null}" SelectionBrush="#FFABABAB" Height="30"/>
                         </Border>
-                        
+
                     </Grid>
                 </Border>
             </Border>

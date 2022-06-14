@@ -248,7 +248,7 @@ namespace Netbird.controls
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
 
-        private BitmapImage Bitmap2BitmapImage(System.Drawing.Bitmap bitmap)
+        public static BitmapImage Bitmap2BitmapImage(System.Drawing.Bitmap bitmap)
         {
             using (MemoryStream stream = new MemoryStream())
             {

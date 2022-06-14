@@ -1,4 +1,5 @@
-﻿using Netbird.controls;
+﻿using CefSharp;
+using Netbird.controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Netbird.browser.handlers
         public static int DEFAULT_MAX_TAB_WIDTH = 150;
         public static int DEFAULT_TAB_HORIZONTAL_MARGIN = 3;
 
-        public DownloadHandler downloadHandler = new DownloadHandler();
+        public DownloadHandler downloadHandler;
         public bool currentlyTabHovering = false;
         public ControllerCallback controllerCallback;
         public Window window;
@@ -31,6 +32,7 @@ namespace Netbird.browser.handlers
             this.tabControl = tabControl;
             this.window = window;
             this.tabsPresenter = tabsPresenter;
+            this.downloadHandler = new DownloadHandler(this);
 
             this.tabControl.SelectionChanged += TabControl_SelectionChanged;
 
@@ -592,6 +594,8 @@ namespace Netbird.browser.handlers
         public interface ControllerCallback
         {
             void OnTitleUpdate(NetbirdTab tab, String title);
+            void OnFileDownloadBegins(DownloadItem item);
+            void OnFileDownloadUpdate(DownloadItem item);
 
         }
     }

@@ -144,6 +144,9 @@
     </ApplicationDefinition>
     <Compile Include="browser\handlers\DownloadHandler.cs" />
     <Compile Include="browser\KnownFolders.cs" />
+    <Compile Include="controls\DownloadableFile.xaml.cs">
+      <DependentUpon>DownloadableFile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="controls\MainTab.xaml.cs">
       <DependentUpon>MainTab.xaml</DependentUpon>
     </Compile>
@@ -154,6 +157,10 @@
       <DependentUpon>OnScreenNotification.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfScreen.cs" />
+    <Page Include="controls\DownloadableFile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="controls\MainTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -303,6 +310,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\main_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\folder.png" />
+    <Resource Include="Resources\play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

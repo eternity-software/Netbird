@@ -3,12 +3,15 @@ using Netbird.browser;
 using Netbird.browser.handlers;
 using Netbird.controls;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace Netbird
@@ -770,6 +773,127 @@ namespace Netbird
         {
             hookAllowed = false;
          
+        }
+        public Dictionary<int, DownloadableFile> downloadList = new Dictionary<int, DownloadableFile>(); 
+        public void OnFileDownloadBegins(DownloadItem item)
+        {
+           
+            this.Dispatcher.Invoke(() =>
+            {
+                if (!downloadList.ContainsKey(item.Id)) { 
+                    DownloadableFile downloadableFile = new DownloadableFile();
+                downloadableFile.fileName.Content = item.FullPath;
+                downloadList.Add(item.Id, downloadableFile);
+                listView.Children.Insert(0, downloadableFile);
+            }
+            });
+         
+          
+        }
+
+        public void OnFileDownloadUpdate(DownloadItem item)
+        {
+           
+        
+
+            this.Dispatcher.Invoke(() =>
+            {
+                DownloadableFile downloadableFile;
+                if (!downloadList.ContainsKey(item.Id))
+                {
+                    downloadableFile = new DownloadableFile();
+                    downloadableFile.fileName.Content = item.FullPath;
+                    downloadList.Add(item.Id, downloadableFile);
+                    listView.Children.Insert(0, downloadableFile);
+                }
+             
+                downloadList.TryGetValue(item.Id, out downloadableFile);
+                downloadableFile.fileName.Content = Path.GetFileName(item.FullPath); 
+                downloadableFile.filePath = item.FullPath;
+                downloadableFile.status.Content = "unknown";
+                if(item.FullPath != null)
+                {
+                    try
+                    {
+                        System.Drawing.Icon icon = System.Drawing.Icon.ExtractAssociatedIcon(item.FullPath);
+                        downloadableFile.filePreview.Source = NetbirdTab.Bitmap2BitmapImage(icon.ToBitmap());
+                    }
+                    catch
+                    { }
+                   
+                }
+            
+               
+                if (item.IsComplete)
+                {
+                    downloadableFile.openFile.Visibility = Visibility.Visible;
+                  
+                    downloadableFile.status.Content = getSize(item.FullPath);
+                }
+                else if (item.IsCancelled)
+                {
+                    downloadableFile.status.Content = "cancelled";
+                }
+                else if (item.IsInProgress)
+                {
+                  
+                    downloadableFile.status.Content = item.PercentComplete + "% (" + getSize(Convert.ToDouble(item.ReceivedBytes)) + ")";
+                }
+            });
+
+           
+        }
+        public string getSize(double  len)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+          
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+
+            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+            // show a single decimal place, and no space.
+            return String.Format("{0:0.##} {1}", len, sizes[order]);
+        }
+
+        public string getSize(string path)
+        {
+           
+            double len = new FileInfo(path).Length;
+          
+
+
+            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+            // show a single decimal place, and no space.
+            return getSize(len);
+        }
+
+
+        bool isMenuBarVisible = false;
+        private void menuButtonActive_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+           
+         
+            DoubleAnimation show = new DoubleAnimation();
+            show.To = 470;
+            show.Duration = new Duration(new TimeSpan(2000000));
+            show.DecelerationRatio = 1;
+
+
+            DoubleAnimation hide = new DoubleAnimation();
+            hide.To = 0;
+            hide.Duration = new Duration(new TimeSpan(2000000));
+            hide.DecelerationRatio = 1;
+
+            if (isMenuBarVisible) menu.BeginAnimation(HeightProperty, hide);
+            if (!isMenuBarVisible) menu.BeginAnimation(HeightProperty, show);
+
+
+            isMenuBarVisible = !isMenuBarVisible;
         }
     }
 }
