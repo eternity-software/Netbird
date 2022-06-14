@@ -28,6 +28,7 @@ namespace Netbird.controls
             InitializeComponent();
             this.tabController = tabController;
             this.tab = netbirdTab;
+            searchBox.Focus();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -52,6 +53,26 @@ namespace Netbird.controls
             tabController.CloseTab(tab);
             if (index == 0) index = 1;
             tabController.addTab("https://youtube.com", index - 1);
+        }
+
+        private void searchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter) return;
+
+            int index = tabController.getIndex(tab);
+            tabController.CloseTab(tab);
+            String query = "https://yandex.ru/search/?text=" + searchBox.Text + "&lr=2";
+            tabController.addTab(query, index - 1);
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            searchBox.Focus();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            searchBox.Focus();
         }
     }
 }

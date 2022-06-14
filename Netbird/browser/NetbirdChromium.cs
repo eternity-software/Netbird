@@ -833,11 +833,12 @@ namespace Netbird.browser
             DisplayHandler = new DisplayHandler(tabController);
             LoadError += OnLoadError;
             Loaded += NetbirdChromium_Loaded;
+            DownloadHandler = tabController.downloadHandler;
         }
 
         private void NetbirdChromium_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-
+           
         }
 
         public void loadExtention()

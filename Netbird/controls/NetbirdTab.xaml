@@ -16,8 +16,9 @@
                 <Storyboard TargetProperty="Width" >
                     <DoubleAnimation From="0" To="150"
                                  AutoReverse="False"
-                                  DecelerationRatio="0.5"
-                             Duration="0:0:0:0.3"
+                                  DecelerationRatio="1"
+                                     
+                             Duration="0:0:0:0.4"
                                    
                                      FillBehavior="Stop"
                                      Completed="Animation_Completed"

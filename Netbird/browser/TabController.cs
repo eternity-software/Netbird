@@ -15,7 +15,7 @@ namespace Netbird.browser.handlers
         public static int DEFAULT_MAX_TAB_WIDTH = 150;
         public static int DEFAULT_TAB_HORIZONTAL_MARGIN = 3;
 
-
+        public DownloadHandler downloadHandler = new DownloadHandler();
         public bool currentlyTabHovering = false;
         public ControllerCallback controllerCallback;
         public Window window;
@@ -24,6 +24,7 @@ namespace Netbird.browser.handlers
         private TabControl tabControl;
         private StackPanel tabsPresenter;
         private List<NetbirdChromium> tabs = new List<NetbirdChromium>();
+     
 
         public TabController(TabControl tabControl, Window window, StackPanel tabsPresenter)
         {
@@ -241,6 +242,11 @@ namespace Netbird.browser.handlers
             tabsPresenter.Children.RemoveAt(index);
             tabs.Remove(netbirdChromium);
             tabControl.Items.RemoveAt(index);
+            if(netbirdChromium != null)
+            {
+                netbirdChromium.Dispose();
+            }
+           
 
             if(tabs.Count == 0)
             {

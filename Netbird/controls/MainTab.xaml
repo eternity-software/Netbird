@@ -4,12 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Netbird.controls"
-             mc:Ignorable="d">
+             
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
+
     <ScrollViewer>
+        
         <Grid ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <Border BorderThickness="1"  CornerRadius="20,20,0,0" ClipToBounds="True">
                 <Border.Background>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="/Resources/main.png"/>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Resources/main_1.png"/>
                 </Border.Background>
                 <Border BorderThickness="1" Background="#66000000" CornerRadius="20,20,0,0">
                     <Grid Margin="0,0,-2,-2">
@@ -19,6 +22,10 @@
                             <Button Content="VK" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_1" Width="100" Height="100" Background="White" Foreground="#FF505050" BorderBrush="White" FontSize="22" Margin="129,0,0,0"/>
                             <Button Content="YouTube" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_2" Width="100" Height="100" Background="White" Foreground="#FF505050" BorderBrush="White" FontSize="22" Margin="260,0,0,0"/>
                         </Grid>
+                        <Border BorderThickness="1" Background="White" CornerRadius="10,10,10,10" Margin="12,330,0,0" HorizontalAlignment="Center" Height="50" Width="500" MouseDown="Border_MouseDown" VerticalAlignment="Top">
+                            <TextBox MaxLines="1"  BorderThickness="0"  x:Name="searchBox" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FF313131" FontSize="18" PreviewKeyDown="searchBox_PreviewKeyDown" BorderBrush="{x:Null}" SelectionBrush="#FFABABAB" Height="19"/>
+                        </Border>
+                        
                     </Grid>
                 </Border>
             </Border>

@@ -34,5 +34,17 @@ namespace Netbird.Properties {
                 this["SavedTabs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Downloads {
+            get {
+                return ((string)(this["Downloads"]));
+            }
+            set {
+                this["Downloads"] = value;
+            }
+        }
     }
 }

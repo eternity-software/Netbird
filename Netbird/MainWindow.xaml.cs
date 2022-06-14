@@ -20,14 +20,20 @@ namespace Netbird
     {
 
         public TabController tabController;
+
+
         private NetbirdChromium selectedNetbirdChromium = null;
         private bool isEditingUrl = false;
         private bool isCtrlPressed = false;
+       
 
         public MainWindow()
         {
 
-
+            if(Properties.Settings.Default.Downloads == "")
+            {
+                App.downloadsFolder = KnownFolders.GetPath(KnownFolder.Downloads);
+            }
 
             InitializeComponent();
             this.DpiChanged += MainWindow_DpiChanged;
@@ -117,6 +123,7 @@ namespace Netbird
                 this.X = x;
                 this.Y = y;
             }
+          
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)

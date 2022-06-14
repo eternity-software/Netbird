@@ -10,9 +10,11 @@ namespace Netbird
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>
+    /// 
+   
     public partial class App : Application
     {
-
+        public static String downloadsFolder;
         public App() : base()
         {
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
@@ -32,10 +34,10 @@ namespace Netbird
             settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
             settings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
 
-            
 
 
-         
+
+          
 
 
             Cef.Initialize(settings);

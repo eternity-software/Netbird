@@ -142,8 +142,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="browser\handlers\DownloadHandler.cs" />
+    <Compile Include="browser\KnownFolders.cs" />
     <Compile Include="controls\MainTab.xaml.cs">
       <DependentUpon>MainTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controls\SelectableItem.xaml.cs">
+      <DependentUpon>SelectableItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="OnScreenNotification.xaml.cs">
       <DependentUpon>OnScreenNotification.xaml</DependentUpon>
@@ -154,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="controls\NetbirdTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="controls\SelectableItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -284,6 +293,16 @@
   <ItemGroup>
     <Resource Include="Resources\no_ssl.png" />
     <Resource Include="Resources\ssl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_button.png" />
+    <Resource Include="Resources\menu_button_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\downloads.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\main_1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
