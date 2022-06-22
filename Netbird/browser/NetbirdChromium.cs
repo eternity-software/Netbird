@@ -18,7 +18,7 @@ namespace Netbird.browser
             
             updateController(tabController);
             
-
+            
       
 
             LoadingStateChanged += (sender, args) =>
@@ -832,6 +832,8 @@ namespace Netbird.browser
             MenuHandler = new ContextMenuHandler(tabController);
             DisplayHandler = new DisplayHandler(tabController);
             LoadError += OnLoadError;
+            RequestHandler = new RequestHandler(tabController);
+            
             Loaded += NetbirdChromium_Loaded;
             DownloadHandler = tabController.downloadHandler;
         }
@@ -968,6 +970,7 @@ namespace Netbird.browser
             if (code == "EmptyResponse") return;
             if (code == "ConnectionReset") return;
             if (code == "QuicProtocolError") return;
+            if (code == "Http2ProtocolError") return;
             ((ChromiumWebBrowser) chromiumWebBrowser).GetMainFrame().LoadHtml("Netbird Error: " + loadErrorArgs.ErrorText + " #" + loadErrorArgs.ErrorCode);
             // throw new NotImplementedException();
 

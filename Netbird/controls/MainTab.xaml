@@ -23,7 +23,10 @@
                             <Button Content="YouTube" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_2" Width="100" Height="100" Background="White" Foreground="#FF505050" BorderBrush="White" FontSize="22" Margin="260,0,0,0"/>
                         </Grid>
                         <Border BorderThickness="1" Background="White" CornerRadius="10,10,10,10" Margin="12,330,0,0" HorizontalAlignment="Center" Height="50" Width="500" MouseDown="Border_MouseDown" VerticalAlignment="Top">
-                            <TextBox MaxLines="1"  BorderThickness="0"  x:Name="searchBox" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FF313131" FontSize="18" PreviewKeyDown="searchBox_PreviewKeyDown" BorderBrush="{x:Null}" SelectionBrush="#FFABABAB" Height="30"/>
+                            <Grid>
+                                <TextBox MaxLines="1"  BorderThickness="0"  x:Name="searchBox" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FF313131" FontSize="18" PreviewKeyDown="searchBox_PreviewKeyDown" BorderBrush="{x:Null}" SelectionBrush="#FFABABAB" Height="30" Margin="1,0,-1,0" PreviewKeyUp="searchBox_PreviewKeyUp" KeyDown="searchBox_KeyDown" TextChanged="searchBox_TextChanged"/>
+                                <Label x:Name="searchHint" Content="Search" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="18" MouseDown="searchHint_MouseDown" MouseUp="searchHint_MouseUp"/>
+                            </Grid>
                         </Border>
 
                     </Grid>

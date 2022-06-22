@@ -785,7 +785,14 @@ namespace Netbird
                 downloadableFile.fileName.Content = item.FullPath;
                 downloadList.Add(item.Id, downloadableFile);
                 listView.Children.Insert(0, downloadableFile);
-            }
+
+                    DoubleAnimation show = new DoubleAnimation();
+                    show.To = 470;
+                    show.Duration = new Duration(new TimeSpan(2000000));
+                    show.DecelerationRatio = 1;
+                    menu.BeginAnimation(HeightProperty, show);
+                    isMenuBarVisible = true;
+                }
             });
          
           
@@ -805,6 +812,12 @@ namespace Netbird
                     downloadableFile.fileName.Content = item.FullPath;
                     downloadList.Add(item.Id, downloadableFile);
                     listView.Children.Insert(0, downloadableFile);
+                    DoubleAnimation show = new DoubleAnimation();
+                    show.To = 470;
+                    show.Duration = new Duration(new TimeSpan(2000000));
+                    show.DecelerationRatio = 1;
+                    menu.BeginAnimation(HeightProperty, show);
+                    isMenuBarVisible = true;
                 }
              
                 downloadList.TryGetValue(item.Id, out downloadableFile);
@@ -894,6 +907,18 @@ namespace Netbird
 
 
             isMenuBarVisible = !isMenuBarVisible;
+        }
+
+        private void tabControl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            DoubleAnimation hide = new DoubleAnimation();
+            hide.To = 0;
+            hide.Duration = new Duration(new TimeSpan(2000000));
+            hide.DecelerationRatio = 1;
+            menu.BeginAnimation(HeightProperty, hide);
+            isMenuBarVisible = false;
+
         }
     }
 }

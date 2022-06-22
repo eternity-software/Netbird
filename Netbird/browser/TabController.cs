@@ -388,7 +388,11 @@ namespace Netbird.browser.handlers
                 };
 
 
-
+                tab.DragEnter += (sender, e) =>
+                {
+                    selectedTab = tab;
+                    tabControl.SelectedIndex = tabControl.Items.IndexOf(virtualTab);
+                };
 
 
                 tab.PreviewMouseUp += (sender, e) =>

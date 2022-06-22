@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,16 @@ namespace Netbird.browser.handlers
 
         void IDownloadHandler.OnBeforeDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback)
         {
+            int counter = 1;
             tabController.controllerCallback.OnFileDownloadBegins(downloadItem);
-            callback.Continue(App.downloadsFolder + "/" + downloadItem.SuggestedFileName, false);
+
+            String path = App.downloadsFolder + "/" + downloadItem.SuggestedFileName;
+            while(File.Exists(path))
+            {
+                path = App.downloadsFolder + "/" + Path.GetFileNameWithoutExtension(downloadItem.SuggestedFileName) + " (" + counter + ")" + Path.GetExtension(downloadItem.SuggestedFileName);
+                counter++;
+            }
+            callback.Continue(path, false);
         }
 
         void IDownloadHandler.OnDownloadUpdated(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback)

@@ -57,7 +57,9 @@ namespace Netbird.controls
 
         private void searchBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+          
             if (e.Key != Key.Enter) return;
+            
 
             int index = tabController.getIndex(tab);
             tabController.CloseTab(tab);
@@ -73,6 +75,40 @@ namespace Netbird.controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             searchBox.Focus();
+        }
+
+        private void searchBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+          
+        }
+
+        private void searchHint_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            searchBox.Focus();
+        }
+
+        private void searchHint_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            searchBox.Focus();
+        }
+
+        private void searchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+
+
+          
+        }
+
+        private void searchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (searchBox.Text.Length > 0)
+            {
+                searchHint.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                searchHint.Visibility = Visibility.Visible;
+            }
         }
     }
 }

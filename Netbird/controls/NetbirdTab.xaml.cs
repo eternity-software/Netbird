@@ -404,5 +404,7 @@ namespace Netbird.controls
         {
             if (tabController.selectedTab != this) RaiseConditionalMouseLeaveEvent();
         }
+
+       
     }
 }
